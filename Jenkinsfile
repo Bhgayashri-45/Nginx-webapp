@@ -5,7 +5,7 @@ pipeline{
     environment {
 
         DOCKER_IMAGE = "bhagyashri45/nginx-webapp"
-        #DOCKER_TAG = 'latest'
+        DOCKER_TAG = 'latest'
         DOCKER_CREDENTIALS_ID = 'docker-hub-creds'
 
     }
