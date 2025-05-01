@@ -12,14 +12,6 @@ pipeline{
 
     stages{
 
-
-       # stage('Checkout'){
-        #    steps{
-        #        git branch: 'main', url: 'https://github.com/Bhgayashri-45/Nginx-webapp.git'
-        #    }
-
-       # }
-
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'Jenkins-Sonarqube-Token', variable: 'SONAR_TOKEN')]) {
