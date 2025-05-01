@@ -13,21 +13,23 @@ pipeline{
     stages{
 
 
-        stage('Checkout'){
-            steps{
-                git branch: 'main', url: 'https://github.com/Bhgayashri-45/Nginx-webapp.git'
-            }
+       # stage('Checkout'){
+        #    steps{
+        #        git branch: 'main', url: 'https://github.com/Bhgayashri-45/Nginx-webapp.git'
+        #    }
 
-        }
+       # }
 
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'Jenkins-Sonarqube-Token', variable: 'SONAR_TOKEN')]) {
                     sh """
-                        echo "sonar.sources=." >> sonar-project.properties"
+                       sonar-scanner \
                           -Dsonar.projectKey=Nginx-webapp \
                           -Dsonar.projectName=Nginx-webapp \
+                          -Dsonar.sources=. \
                           -Dsonar.host.url=http://localhost:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
                           -X
                     """
                 }
@@ -37,7 +39,7 @@ pipeline{
         stage('Docker Build') {
 
             steps {
-
+                sh 'echo "Building Docker Image ..."'
                 sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
 
             }
@@ -51,9 +53,9 @@ pipeline{
                 withCredentials([usernamePassword(credentialsId: '$DOCKER_CREDENTIALS_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
                     sh '''
-
+                        echo "Docker logging in ..."
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
+                        echo "Docker image push ..."
                         docker push $DOCKER_IMAGE:$DOCKER_TAG
 
                     '''
