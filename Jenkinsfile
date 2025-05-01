@@ -6,8 +6,7 @@ pipeline{
 
         DOCKER_IMAGE = "bhagyashri45/nginx-webapp"
         DOCKER_TAG = 'latest'
-        DOCKER_CREDENTIALS_ID = 'docker-hub-creds'
-
+        
     }
 
     stages{
@@ -42,7 +41,7 @@ pipeline{
 
             steps {
 
-                withCredentials([usernamePassword(credentialsId: '$DOCKER_CREDENTIALS_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
 
                     sh '''
                         echo "Docker logging in ..."
